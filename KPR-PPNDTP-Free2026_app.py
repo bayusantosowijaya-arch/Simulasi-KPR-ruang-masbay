@@ -49,11 +49,11 @@ html_content = """
                 <span class="font-black text-xl text-slate-900">RUANG MASBAY</span>
                 <span class="text-[9px] font-bold text-slate-400 -mt-1 tracking-widest uppercase">Property Intelegent 2026</span>
             </div>
-            <div class="text-[10px] bg-slate-900 text-white px-4 py-1.5 rounded-full font-bold uppercase">PPN DTP ACTIVE</div>
+            <div class="text-[10px] bg-green-600 text-white px-4 py-1.5 rounded-full font-bold uppercase tracking-widest">PPN DTP READY</div>
         </nav>
 
         <div class="marquee-container">
-            <div class="marquee-text">+++ Ruang Masbay Property Intelegent 2026 +++ Free PPN DTP 11% (< 2M) +++ Free PPN DTP 220JT (> 2M) +++ UTJ Termasuk DP +++ AJB 0.5% & BPHTB 5% +++</div>
+            <div class="marquee-text">+++ Ruang Masbay Property Intelegent 2026 +++ Free PPN DTP 11% (< 2M Exclude) +++ Free PPN DTP 220JT (> 2M Exclude) +++ UTJ Memotong DP +++ AJB 0.5% & BPHTB 5% +++</div>
         </div>
 
         <div class="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -62,11 +62,11 @@ html_content = """
                     <h2 class="label-style mb-8 border-b pb-4 text-slate-900 font-black">Konfigurasi Finansial</h2>
                     <div class="space-y-8">
                         <div>
-                            <label class="label-style">Harga Properti (Inc. PPN 11%)</label>
+                            <label class="label-style">Harga Properti (Include PPN 11%)</label>
                             <input type="text" id="rawPriceInc" value="2.500.000.000" oninput="handleInput(this)" class="input-premium">
-                            <div class="mt-3 p-3 bg-green-50 rounded-lg border border-green-100">
-                                <p class="text-[9px] text-green-700 font-bold uppercase">Subsidi PPN DTP:</p>
-                                <p id="subsidiLabel" class="text-sm font-black text-green-800">Rp 0</p>
+                            <div class="grid grid-cols-2 gap-4 mt-2">
+                                <p class="text-[9px] text-slate-500 font-bold">Price Excl. PPN: <span id="labelExcPPN" class="text-slate-900">Rp 0</span></p>
+                                <p class="text-[9px] text-green-600 font-bold text-right">Subsidi PPN DTP: <span id="subsidiLabel">Rp 0</span></p>
                             </div>
                         </div>
 
@@ -74,43 +74,43 @@ html_content = """
                             <div>
                                 <label class="label-style">Booking Fee (UTJ)</label>
                                 <input type="text" id="rawBooking" value="25.000.000" oninput="handleInput(this)" class="input-premium">
-                                <p class="text-[9px] text-blue-600 mt-1 font-bold italic">Nett (Tanpa PPN): <span id="utjNettLabel">Rp 0</span></p>
+                                <p class="text-[9px] text-blue-600 mt-1 font-bold italic">Nett (Excl. PPN 11%): <br><span id="utjNettLabel">Rp 0</span></p>
                             </div>
                             <div>
                                 <label class="label-style">DP (%)</label>
                                 <input type="number" id="dpPct" value="10" oninput="calculate()" class="input-premium">
-                                <p id="dpNominalLabel" class="text-[9px] text-slate-500 mt-1 font-bold"></p>
+                                <p id="dpNominalLabel" class="text-[9px] text-slate-900 mt-1 font-bold">Rp 0</p>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-6">
                             <div><label class="label-style">Tenor (Tahun)</label><input type="number" id="tenor" value="20" oninput="calculate()" class="input-premium"></div>
-                            <div><label class="label-style">Bunga (% P.A)</label><input type="number" id="rate" value="4.75" step="0.01" oninput="calculate()" class="input-premium"></div>
+                            <div><label class="label-style">Suku Bunga (% P.A)</label><input type="number" id="rate" value="4.75" step="0.01" oninput="calculate()" class="input-premium"></div>
                         </div>
 
                         <div>
                             <label class="label-style">Estimasi Biaya Akad KPR (%)</label>
                             <input type="number" id="akadPct" value="5" oninput="calculate()" class="input-premium">
-                            <p id="akadNominalLabel" class="text-[9px] text-slate-500 mt-1 font-bold italic"></p>
+                            <p id="akadNominalLabel" class="text-[10px] text-slate-500 mt-1 font-bold italic tracking-tight"></p>
                         </div>
                     </div>
                 </div>
                 
-                <div class="p-6 bg-blue-900 rounded-2xl shadow-xl">
+                <div class="p-6 bg-slate-900 rounded-2xl shadow-xl">
                     <p class="text-[11px] text-white leading-relaxed font-medium">
-                        <span class="text-yellow-400 font-black">INFO:</span> Booking Fee (UTJ) sudah termasuk dalam nilai jual dan bersifat memotong nilai pelunasan/DP.
+                        <span class="text-yellow-400 font-black">CATATAN:</span> Nominal <b>Uang Tanda Jadi (UTJ)</b> sudah termasuk dalam komponen Harga Jual dan akan mengurangi nilai kewajiban Down Payment (DP) pembeli.
                     </p>
                 </div>
             </div>
 
             <div class="lg:col-span-7 space-y-6">
                 <div class="dark-card p-10 shadow-2xl relative overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800">
-                    <p class="label-style text-slate-400 mb-2 font-black tracking-widest">ESTIMASI ANGSURAN /BULAN</p>
+                    <p class="label-style text-slate-400 mb-2 font-black tracking-widest">ESTIMASI ANGSURAN KPR /BULAN</p>
                     <h3 id="monthlyInstallment" class="text-5xl md:text-6xl font-black tracking-tighter text-white">Rp 0</h3>
                     
                     <div class="grid grid-cols-2 gap-6 mt-10 pt-8 border-t border-white/10 text-sm">
-                        <div><p class="text-[10px] uppercase opacity-40 font-bold">Plafon KPR</p><p id="plafon" class="text-xl font-bold text-yellow-500">Rp 0</p></div>
-                        <div class="text-right"><p class="text-[10px] uppercase opacity-40 font-bold">Harga Nett (After DTP)</p><p id="nettPriceLabel" class="text-xl font-bold">Rp 0</p></div>
+                        <div><p class="text-[10px] uppercase opacity-40 font-bold">Plafon Pinjaman</p><p id="plafon" class="text-xl font-bold text-yellow-500">Rp 0</p></div>
+                        <div class="text-right"><p class="text-[10px] uppercase opacity-40 font-bold">Harga Nett (Setelah PPN DTP)</p><p id="nettPriceLabel" class="text-xl font-bold">Rp 0</p></div>
                     </div>
                 </div>
 
@@ -127,7 +127,7 @@ html_content = """
 
                 <div class="luxury-card overflow-hidden h-[400px] flex flex-col border border-slate-100">
                     <div class="p-5 border-b bg-slate-50 flex justify-between items-center">
-                        <p class="label-style text-slate-900 font-black">AMORTISASI CICILAN KPR</p>
+                        <p class="label-style text-slate-900 font-black">TABEL AMORTISASI KPR (SALDO MENURUN)</p>
                     </div>
                     <div class="overflow-y-auto flex-grow">
                         <table class="w-full text-left">
@@ -150,8 +150,8 @@ html_content = """
                 calculate();
             }
         }
-        function formatNumber(n) { return n.replace(/\\\\D/g, "").replace(/\\\\B(?=(\\\\d{3})+(?!\\\\d))/g, "."); }
-        function parseNumber(s) { return parseFloat(s.replace(/\\\\./g, "")) || 0; }
+        function formatNumber(n) { return n.replace(/\\D/g, "").replace(/\\B(?=(\\d{3})+(?!\\d))/g, "."); }
+        function parseNumber(s) { return parseFloat(s.replace(/\\./g, "")) || 0; }
         function formatIDR(val) { return "Rp " + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(val); }
         function handleInput(el) { el.value = formatNumber(el.value); calculate(); }
 
@@ -163,10 +163,18 @@ html_content = """
             const rate = parseFloat(document.getElementById('rate').value) || 0;
             const akadPct = parseFloat(document.getElementById('akadPct').value) || 0;
 
-            let subsidiPPN = (priceInc < 2000000000) ? (priceInc - (priceInc / 1.11)) : 220000000;
+            // Dasar Harga Exclude PPN
+            const priceExc = priceInc / 1.11;
+            document.getElementById('labelExcPPN').innerText = formatIDR(priceExc);
+
+            // Logika PPN DTP diberikan kepada Harga Exclude
+            let subsidiPPN = (priceExc < 2000000000) ? (priceExc * 0.11) : 220000000;
             const nettPrice = priceInc - subsidiPPN;
+            
+            // Perhitungan UTJ Nett (Potong PPN 11%)
             const utjNett = utjRaw / 1.11;
             
+            // DP & Plafon
             const dpNominal = nettPrice * (dpPct / 100);
             const plafon = nettPrice - dpNominal;
             const akadCost = plafon * (akadPct / 100);
@@ -175,15 +183,16 @@ html_content = """
             const n = tenor * 12;
             const monthly = r > 0 ? plafon * (r * Math.pow(1+r, n)) / (Math.pow(1+r, n) - 1) : plafon/n;
 
+            // UI Update
             document.getElementById('subsidiLabel').innerText = formatIDR(subsidiPPN);
             document.getElementById('utjNettLabel').innerText = formatIDR(utjNett);
-            document.getElementById('dpNominalLabel').innerText = "Setara: " + formatIDR(dpNominal);
-            document.getElementById('akadNominalLabel').innerText = "Est. Biaya: " + formatIDR(akadCost);
+            document.getElementById('dpNominalLabel').innerText = "Nominal DP: " + formatIDR(dpNominal);
+            document.getElementById('akadNominalLabel').innerText = "Est. Biaya Bank: " + formatIDR(akadCost);
             document.getElementById('nettPriceLabel').innerText = formatIDR(nettPrice);
             document.getElementById('plafon').innerText = formatIDR(plafon);
             document.getElementById('monthlyInstallment').innerText = formatIDR(monthly);
             
-            // Biaya Surat
+            // Biaya Surat-Surat (AJB & BPHTB)
             document.getElementById('resAJB').innerText = formatIDR(nettPrice * 0.005);
             document.getElementById('resBPHTB').innerText = formatIDR(nettPrice * 0.05);
 
@@ -204,4 +213,4 @@ html_content = """
 </html>
 """
 
-components.html(html_content, height=1500, scrolling=True)
+components.html(html_content, height=1600, scrolling=True)
