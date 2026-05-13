@@ -1,0 +1,289 @@
+
+import streamlit as st
+import streamlit.components.v1 as components
+
+st.set_page_config(page_title="Ruang Masbay Property Intelegent", layout="wide")
+
+st.markdown("""
+    <style>
+        .block-container { padding: 0rem; }
+        iframe { border: none; }
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+    </style>
+""", unsafe_allow_html=True)
+
+html_content = """
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; margin: 0; overflow-x: hidden; }
+        .luxury-card { background: white; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); border: 1px solid #f1f5f9; }
+        .dark-card { background: #0f172a; color: white; border-radius: 24px; }
+        .input-premium { width: 100%; border-bottom: 2px solid #e2e8f0; padding: 10px 0; font-size: 1.25rem; font-weight: 700; outline: none; transition: 0.3s; background: transparent; }
+        .input-premium:focus { border-color: #0f172a; }
+        .label-style { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.05em; }
+        .highlight-gold { color: #eab308; }
+        
+        .marquee-container {
+            overflow: hidden;
+            background: #0f172a;
+            padding: 10px 0;
+            display: none;
+        }
+        .marquee-text {
+            white-space: nowrap;
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+            font-size: 13px;
+            font-weight: 700;
+            color: #f8fafc;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0f172a]">
+        <div class="w-full max-w-md bg-white rounded-3xl p-10 text-center mx-4 shadow-2xl border border-slate-100">
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">PROPERTY INTELEGENT</h1>
+            <p class="text-sm text-slate-400 mb-8 mt-1 font-medium">Ruang Masbay 2026</p>
+            <input type="password" id="passInput" placeholder="Enter Security Code" 
+            class="w-full p-4 rounded-xl border border-slate-200 text-center outline-none focus:ring-2 focus:ring-slate-900 transition-all">
+            <button onclick="checkAuth()" class="w-full bg-[#0f172a] text-white py-4 mt-4 rounded-xl font-bold hover:bg-slate-800 transition shadow-lg">UNLOCK SYSTEM</button>
+            <p id="errorMsg" class="text-red-500 text-xs mt-4 font-bold hidden uppercase tracking-widest">Wrong Security Code</p>
+        </div>
+    </div>
+
+    <div id="main-app" class="hidden min-h-screen pb-20">
+        <nav class="bg-white border-b px-6 py-5 flex justify-between items-center sticky top-0 z-40">
+            <div class="flex flex-col">
+                <span class="font-black tracking-tighter text-xl text-slate-900">RUANG MASBAY</span>
+                <span class="text-[9px] font-bold text-slate-400 -mt-1 tracking-[0.2em]">PROPERTY INTELEGENT 2026</span>
+            </div>
+            <div class="text-[10px] bg-slate-900 text-white px-4 py-1.5 rounded-full font-bold uppercase tracking-widest shadow-sm">Incentive: FREE PPN ACTIVE</div>
+        </nav>
+
+        <div id="marquee" class="marquee-container">
+            <div class="marquee-text">
+                +++ Ruang Masbay 2026 Property Intelegent +++ Government Incentive: Free PPN 11% (< 2M) & Free PPN 220JT (> 2M) Applied +++ UTJ PPN Discount Active +++
+            </div>
+        </div>
+
+        <div class="max-w-6xl mx-auto p-6 mt-4 grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-5 space-y-6">
+                <div class="luxury-card p-8">
+                    <h2 class="label-style mb-8 border-b pb-4 text-slate-900 font-black">Financial Configuration</h2>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <label class="label-style">Harga Properti (Inc. PPN 11%)</label>
+                            <div class="flex items-center border-b-2 border-slate-200 focus-within:border-slate-900 transition">
+                                <span class="text-xl font-bold text-slate-400 mr-2">Rp</span>
+                                <input type="text" id="rawPriceInc" value="2.500.000.000" oninput="handleInput(this)" class="w-full p-2 text-2xl font-bold outline-none bg-transparent">
+                            </div>
+                            <div class="mt-3 p-3 bg-green-50 rounded-lg border border-green-100">
+                                <p class="text-[10px] text-green-700 font-bold uppercase">Potongan Subsidi PPN DTP:</p>
+                                <p id="subsidiLabel" class="text-sm font-black text-green-800">Rp 0</p>
+                                <p class="text-[9px] text-green-600 mt-1 italic font-medium">Harga Nett Setelah Subsidi: <span id="nettPriceLabel" class="font-bold">Rp 0</span></p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <label class="label-style">Booking Fee (UTJ)</label>
+                                <input type="text" id="rawBooking" value="25.000.000" oninput="handleInput(this)" class="input-premium">
+                                <div class="mt-2 text-[10px] font-bold text-slate-500 bg-slate-100 p-1.5 rounded text-center">
+                                    Setelah Free PPN (11%): <br>
+                                    <span id="utjNettLabel" class="text-blue-600 font-black text-xs">Rp 0</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="label-style">DP (%)</label>
+                                <input type="number" id="dpPct" value="10" oninput="calculate()" class="input-premium">
+                                <p id="dpNominal" class="text-[10px] font-bold text-blue-600 mt-1">Rp 0</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <label class="label-style">Tenor (Tahun)</label>
+                                <input type="number" id="tenor" value="15" oninput="calculate()" class="input-premium">
+                            </div>
+                            <div>
+                                <label class="label-style">Suku Bunga (% P.A)</label>
+                                <input type="number" id="rate" value="4.75" step="0.01" oninput="calculate()" class="input-premium">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="label-style">Biaya Akad KPR (%)</label>
+                            <input type="number" id="akadPct" value="5" oninput="calculate()" class="input-premium">
+                            <p id="akadNominal" class="text-[10px] font-bold text-slate-500 mt-1 italic tracking-tight">Est: Rp 0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-blue-900 rounded-2xl shadow-xl">
+                    <p class="text-[11px] text-white leading-relaxed font-medium">
+                        <span class="text-yellow-400 font-black">IMPORTANT:</span> Uang Tanda Jadi (Booking Fee) bersifat <b>SUDAH TERMASUK</b> dalam harga jual properti.
+                    </p>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 space-y-6">
+                <div class="dark-card p-10 shadow-2xl relative overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800">
+                    <div class="relative z-10">
+                        <p class="label-style text-slate-500 mb-2 font-black tracking-widest text-xs">MONTHLY INSTALLMENT ESTIMATE</p>
+                        <h3 id="monthlyInstallment" class="text-5xl md:text-6xl font-black tracking-tighter text-white">Rp 0</h3>
+                        
+                        <div class="grid grid-cols-2 gap-6 mt-10 pt-8 border-t border-white/10 text-sm">
+                            <div>
+                                <p class="text-[10px] uppercase opacity-40 font-bold tracking-widest">KPR Ceiling (Plafon)</p>
+                                <p id="plafon" class="text-xl font-bold highlight-gold">Rp 0</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] uppercase opacity-40 font-bold tracking-widest">Property Value (After PPN Subsidy)</p>
+                                <p id="valInc" class="text-xl font-bold">Rp 0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="luxury-card p-6 border-b-8 border-slate-900">
+                        <p class="label-style mb-1 text-slate-400 font-black">Legal & Tax (Est. 5.5%)</p>
+                        <p id="resLegal" class="text-xl font-bold text-slate-800">Rp 0</p>
+                    </div>
+                    <div class="luxury-card p-6 border-b-8 border-slate-900">
+                        <p class="label-style mb-1 text-slate-400 font-black">Bank Admin & Insurance</p>
+                        <p id="resAkadTotal" class="text-xl font-bold text-slate-800">Rp 0</p>
+                    </div>
+                </div>
+
+                <div class="luxury-card overflow-hidden h-[380px] flex flex-col border border-slate-100 shadow-xl">
+                    <div class="p-5 border-b bg-slate-50 flex justify-between items-center">
+                        <p class="label-style text-slate-900 font-black">FULL TENOR AMORTIZATION SCHEDULE</p>
+                    </div>
+                    <div class="overflow-y-auto flex-grow">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-900 text-white text-[9px] uppercase sticky top-0 z-10">
+                                <tr>
+                                    <th class="px-6 py-4 tracking-widest">Month</th>
+                                    <th class="px-6 py-4 tracking-widest">Principal Payment</th>
+                                    <th class="px-6 py-4 text-right tracking-widest">Loan Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="amortTable" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkAuth() {
+            const pass = document.getElementById('passInput').value;
+            if(pass === "RuangMasbay2026") {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
+                document.getElementById('marquee').style.display = 'block';
+                calculate();
+            } else {
+                document.getElementById('errorMsg').classList.remove('hidden');
+                setTimeout(() => { document.getElementById('errorMsg').classList.add('hidden'); }, 2000);
+            }
+        }
+
+        document.getElementById('passInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') checkAuth(); });
+
+        function formatNumber(n) { return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+        function parseNumber(s) { return parseFloat(s.replace(/\./g, "")) || 0; }
+        function formatIDR(val) { return "Rp " + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(val); }
+
+        function handleInput(el) {
+            let cursor = el.selectionStart;
+            let oldLen = el.value.length;
+            el.value = formatNumber(el.value);
+            let newLen = el.value.length;
+            el.selectionEnd = cursor + (newLen - oldLen);
+            calculate();
+        }
+
+        function calculate() {
+            const priceInc = parseNumber(document.getElementById('rawPriceInc').value);
+            const utjRaw = parseNumber(document.getElementById('rawBooking').value);
+            const dpPct = parseFloat(document.getElementById('dpPct').value) || 0;
+            const tenor = parseFloat(document.getElementById('tenor').value) || 0;
+            const rate = parseFloat(document.getElementById('rate').value) || 0;
+            const akadPct = parseFloat(document.getElementById('akadPct').value) || 0;
+
+            let subsidiPPN = 0;
+            if (priceInc < 2000000000) {
+                subsidiPPN = priceInc - (priceInc / 1.11);
+            } else {
+                subsidiPPN = 220000000;
+            }
+            
+            const nettPrice = priceInc - subsidiPPN;
+            const utjNett = utjRaw / 1.11;
+            
+            const dpNominal = nettPrice * (dpPct / 100);
+            const plafon = nettPrice - dpNominal;
+            const akadCost = plafon * (akadPct / 100);
+            
+            const r = (rate / 100) / 12;
+            const n = tenor * 12;
+            const monthly = r > 0 ? plafon * (r * Math.pow(1+r, n)) / (Math.pow(1+r, n) - 1) : plafon/n;
+
+            document.getElementById('subsidiLabel').innerText = formatIDR(subsidiPPN);
+            document.getElementById('nettPriceLabel').innerText = formatIDR(nettPrice);
+            document.getElementById('utjNettLabel').innerText = formatIDR(utjNett);
+            document.getElementById('valInc').innerText = formatIDR(nettPrice);
+            document.getElementById('dpNominal').innerText = "Booking Fees (UTJ) Reduce DP: " + formatIDR(dpNominal);
+            document.getElementById('monthlyInstallment').innerText = formatIDR(monthly);
+            document.getElementById('plafon').innerText = formatIDR(plafon);
+            document.getElementById('resLegal').innerText = formatIDR((nettPrice / 1.11) * 0.055);
+            document.getElementById('resAkadTotal').innerText = formatIDR(akadCost);
+            document.getElementById('akadNominal').innerText = "Est: " + formatIDR(akadCost);
+
+            let tableHTML = "";
+            let balance = plafon;
+            for(let i=1; i<=n; i++) {
+                let interestBln = balance * r;
+                let principalBln = monthly - interestBln;
+                balance -= principalBln;
+                if(i <= 360) {
+                    tableHTML += `<tr class="hover:bg-slate-50 transition">
+                        <td class="px-6 py-3 font-bold text-slate-400 text-[10px]">${i}</td>
+                        <td class="px-6 py-3 text-slate-600 text-[10px]">${formatIDR(principalBln)}</td>
+                        <td class="px-6 py-3 text-right font-bold text-slate-900 text-[10px]">${formatIDR(Math.max(0, balance))}</td>
+                    </tr>`;
+                }
+            }
+            document.getElementById('amortTable').innerHTML = tableHTML;
+        }
+    </script>
+</body>
+</html>
+"""
+
+with open("app.py", "w") as f:
+    f.write(app_code)
