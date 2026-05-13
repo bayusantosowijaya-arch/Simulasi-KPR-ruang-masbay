@@ -144,7 +144,7 @@ html_content = """
 
     <script>
         function checkAuth() {
-            if(document.getElementById('passInput').value === "RuangMasbay2026") {
+            if(document.getElementById('passInput').value === "KPR2026") {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('main-app').classList.remove('hidden');
                 calculate();
